@@ -1,21 +1,28 @@
 <script setup lang="ts">
-// 临时数据，Day 16 会换成从 Markdown 文件自动读取
-const posts = [
-    { slug: "week-01-cli-and-git", title: "Week 1 走完，我的命令行 + Git 指南", date: "2026-06-15" },
-    { slug: "hello-world", title: "Hello World", date: "2026-11-25" },
-];
+import { posts } from "@/utils/posts";
 </script>
 
 <template>
     <section>
-        <h1 class="text-2xl font-bold mb-6">文章</h1>
-        <ul class="space-y-4">
+        <h1 class="text-2xl font-bold mb-8">文章</h1>
+
+        <p v-if="posts.length === 0" class="text-gray-400">还没有文章</p>
+
+        <ul class="space-y-8">
             <li v-for="post in posts" :key="post.slug">
                 <RouterLink :to="{ name: 'post-detail', params: { slug: post.slug } }"
-                    class="text-lg hover:text-blue-600">
+                    class="text-xl font-semibold hover:text-blue-600">
                     {{ post.title }}
                 </RouterLink>
-                <p class="text-sm text-gray-400">{{ post.date }}</p>
+                <div class="mt-1 flex items-center gap-3 text-sm text-gray-400">
+                    <time :datetime="post.date">{{ post.date }}</time>
+                    <span v-for="tag in post.tags" :key="tag" class="px-2 py-0.5 rounded bg-gray-100 text-gray-500">
+                        {{ tag }}
+                    </span>
+                </div>
+                <p v-if="post.description" class="mt-2 text-gray-600 leading-relaxed">
+                    {{ post.description }}
+                </p>
             </li>
         </ul>
     </section>
